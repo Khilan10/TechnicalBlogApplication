@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http:////thymeleaf.org">
+<head th:replace="layout::site-head">
+    <title>Sring MVC registration</title>
+</head>
+ <header th:replace="layout::logged-out"></header>
+<body>
+     <h2>Please Register</h2>
+     <form method="post" th:object="${User}">
+         <label for="name">Name:</label>
+         <input type="text" id="name" name="name">
+         <label for="mobile">Mobile No:</label>
+         <input type="text" id="mobile" name="mobile">
+         <label for="username">User Name:</label>
+         <input type="text" id="username" name="username">
+         <label for="password">Password:</label>
+         <input type="password" id="password" name="password">
+         <input type="submit" value="register">
+     </form>
+</body>
+</html>
