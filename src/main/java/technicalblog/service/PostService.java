@@ -1,56 +1,87 @@
 package technicalblog.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import technicalblog.model.Post;
+import technicalblog.repository.PostRepository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.TypedQuery;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PostService {
 
-    public ArrayList<Post> getAllPosts(){
 
-        ArrayList<Post> posts=new ArrayList<Post>();
-        Post post1=new Post();
-        post1.setTitle("Post 1");
-        post1.setBody("body 1");
-        post1.setDate(new Date());
+     @Autowired
+     private PostRepository postRepository;
+      public List<Post> postService(){
 
-        Post post2=new Post();
-        post2.setTitle("Post 2");
-        post2.setBody("body 2");
-        post2.setDate(new Date());
+        return postRepository.getAllPost();
 
-        Post post3=new Post();
-        post3.setTitle("Post 3");
-        post3.setBody("body 3");
-        post3.setDate(new Date());
 
-        posts.add(post1);
-        posts.add(post2);
-        posts.add(post3);
 
-        return  posts;
+        /*Connection con=null;
+        try{
+            Class.forName("org.postgresql.Driver");
+            con= DriverManager.getConnection("jdbc:postgresql://localhost:5432/technicalBlog","postgres","postgres");
+            Statement statement=con.createStatement();
+            ResultSet rs=statement.executeQuery("select * from posts");
+            while(rs.next()){
+                Post post=new Post();
+                post.setTitle(rs.getString("title"));
+                post.setDate(rs.getDate("date"));
+                post.setBody(rs.getString("description"));
+                posts.add(post);
+            }
+
+        }catch(ClassNotFoundException| SQLException ex){
+            ex.printStackTrace();
+        }finally {
+            try{
+               if(!con.isClosed()){
+                   con.close();
+               }
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
+        }
+
+        return  posts;*/
+
 
     }
 
-    public ArrayList<Post> getOnePost(){
+    public Post getOnePost(){
 
-        ArrayList<Post> posts=new ArrayList<Post>();
-
-        Post post=new Post();
-        post.setTitle("Your first Post");
-        post.setBody("This is my first post");
-        post.setDate(new Date());
-
-        posts.add(post);
-
-        return posts;
-
-    }
+        return postRepository.getLatestPost();
+}
 
     public void createPost(Post newPost){
+          newPost.setDate(new Date());
+          postRepository.createPost(newPost);
+        System.out.println("Print new Post"+newPost);
 
     }
+
+    public Post getPost(Integer id){
+       return postRepository.getPost(id);
+    }
+
+    public void updatePost(Post updatedPost){
+          updatedPost.setDate(new Date());
+          postRepository.updatePost(updatedPost);
+
+    }
+
+    public void deletePost(Integer deletePostId){
+          postRepository.deletePost(deletePostId);
+    }
+
+
 }
